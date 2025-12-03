@@ -64,9 +64,18 @@ struct BlinkView: View {
     let opacity: Double
     
     var body: some View {
-        Rectangle()
-            .fill(Color.black.opacity(opacity))
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .edgesIgnoringSafeArea(.all)
+        ZStack {
+            // Black overlay
+            Rectangle()
+                .fill(Color.black.opacity(opacity))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            // "Blink Your Eyes!" text
+            Text("Blink Your Eyes!")
+                .font(.system(size: 72, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+        }
+        .edgesIgnoringSafeArea(.all)
     }
 }

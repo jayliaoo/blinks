@@ -27,9 +27,10 @@ struct SettingsView: View {
                         Spacer()
                         Text(formatInterval(blinkInterval))
                             .foregroundColor(.secondary)
+                            .fontWeight(.semibold)
                     }
                     
-                    Slider(value: $blinkInterval, in: 60...3600, step: 60) {
+                    Slider(value: $blinkInterval, in: 30...300, step: 30) {
                         Text("Interval")
                     }
                     .onChange(of: blinkInterval) { _ in
@@ -37,11 +38,11 @@ struct SettingsView: View {
                     }
                     
                     HStack {
-                        Text("1 min")
+                        Text("0.5 min")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Spacer()
-                        Text("60 min")
+                        Text("5 min")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -57,18 +58,19 @@ struct SettingsView: View {
                         Spacer()
                         Text(String(format: "%.1f sec", blinkDuration))
                             .foregroundColor(.secondary)
+                            .fontWeight(.semibold)
                     }
                     
-                    Slider(value: $blinkDuration, in: 0.1...3.0, step: 0.1) {
+                    Slider(value: $blinkDuration, in: 0.5...5.0, step: 0.5) {
                         Text("Duration")
                     }
                     
                     HStack {
-                        Text("0.1 sec")
+                        Text("0.5 sec")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Spacer()
-                        Text("3.0 sec")
+                        Text("5.0 sec")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -84,6 +86,7 @@ struct SettingsView: View {
                         Spacer()
                         Text("\(Int(blinkOpacity * 100))%")
                             .foregroundColor(.secondary)
+                            .fontWeight(.semibold)
                     }
                     
                     Slider(value: $blinkOpacity, in: 0.1...1.0, step: 0.05) {
@@ -148,8 +151,8 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView(
-        blinkInterval: .constant(1200),
-        blinkDuration: .constant(0.5),
+        blinkInterval: .constant(60),
+        blinkDuration: .constant(1.0),
         blinkOpacity: .constant(0.5),
         launchAtLogin: .constant(false),
         onLaunchAtLoginChanged: { _ in },

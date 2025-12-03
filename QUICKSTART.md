@@ -26,9 +26,9 @@ The project should now be open in Xcode. If not, run:
 1. Click the eye icon in the menu bar
 2. Select **"Settings"**
 3. Adjust the following:
-   - **Blink Interval**: How often to blink (default: 20 minutes)
-   - **Blink Duration**: How long the blink lasts (default: 0.5 seconds)
-   - **Opacity**: How dark the blink is (default: 50%)
+   - **Blink Interval**: How often to blink (0.5-5 minutes, default: 1 minute)
+   - **Blink Duration**: How long the blink lasts (0.5-5.0 seconds, default: 1.0 second)
+   - **Opacity**: How dark the blink is (10-100%, default: 50%)
    - **Launch at Login**: Enable to start automatically
 
 ### 5. Test It Out
@@ -59,22 +59,22 @@ The project should now be open in Xcode. If not, run:
 
 ### Recommended Settings for Eye Health
 
-Based on the 20-20-20 rule:
+Based on the 20-20-20 rule (adapted for shorter intervals):
 
-- **Interval**: 20 minutes (1200 seconds)
+- **Interval**: 2-3 minutes
 - **Duration**: 1-2 seconds
 - **Opacity**: 50-70%
 
 ### For Subtle Reminders
 
-- **Interval**: 30-60 minutes
-- **Duration**: 0.3-0.5 seconds
+- **Interval**: 4-5 minutes
+- **Duration**: 0.5-1.0 seconds
 - **Opacity**: 30-40%
 
 ### For Strong Reminders
 
-- **Interval**: 15-20 minutes
-- **Duration**: 1-3 seconds
+- **Interval**: 1-2 minutes
+- **Duration**: 2-3 seconds
 - **Opacity**: 70-100%
 
 ## 🔧 Troubleshooting

@@ -7,8 +7,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var blinkTimer: Timer?
     
     // Settings with UserDefaults persistence
-    @AppStorage("blinkInterval") private var blinkInterval: Double = 1200.0 // 20 minutes in seconds
-    @AppStorage("blinkDuration") private var blinkDuration: Double = 0.5 // 0.5 seconds
+    @AppStorage("blinkInterval") private var blinkInterval: Double = 60.0 // 1 minute in seconds
+    @AppStorage("blinkDuration") private var blinkDuration: Double = 1.0 // 1.0 second
     @AppStorage("blinkOpacity") private var blinkOpacity: Double = 0.5 // 50% transparency
     @AppStorage("launchAtLogin") private var launchAtLogin: Bool = false
     

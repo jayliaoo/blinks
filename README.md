@@ -5,9 +5,10 @@ A native macOS menu bar application that periodically displays a full-screen bli
 ## Features
 
 - 🎯 **Menu Bar App**: Lives in your menu bar, stays out of your way
-- ⏰ **Configurable Interval**: Set how often you want to be reminded (1-60 minutes)
-- ⚡ **Adjustable Duration**: Control how long the blink lasts (0.1-3.0 seconds)
+- ⏰ **Configurable Interval**: Set how often you want to be reminded (0.5-5 minutes)
+- ⚡ **Adjustable Duration**: Control how long the blink lasts (0.5-5.0 seconds)
 - 🌓 **Custom Opacity**: Set the transparency of the blink (10-100%)
+- 💬 **Visual Reminder**: "Blink Your Eyes!" text appears during the animation
 - 🚀 **Launch at Login**: Automatically start when you log in
 - 🖥️ **Multi-Display Support**: Works across all connected displays
 - ✨ **Smooth Animations**: Gentle fade in/out effects
@@ -41,9 +42,9 @@ When you first launch the app, you'll see an eye icon (👁️) appear in your m
 
 Click on the eye icon in the menu bar and select "Settings" to configure:
 
-- **Blink Interval**: How often the blink appears (default: 20 minutes)
-- **Blink Duration**: How long the blink lasts (default: 0.5 seconds)
-- **Opacity**: How dark the blink is (default: 50%)
+- **Blink Interval**: How often the blink appears (0.5-5 minutes, default: 1 minute)
+- **Blink Duration**: How long the blink lasts (0.5-5.0 seconds, default: 1.0 second)
+- **Opacity**: How dark the blink is (10-100%, default: 50%)
 - **Launch at Login**: Enable to start automatically when you log in
 
 ### Menu Options
@@ -59,6 +60,7 @@ Right-click (or click) the menu bar icon to access:
 The app uses a timer to periodically display a full-screen overlay on all your displays. The overlay:
 
 - Appears with a smooth fade-in animation
+- Shows "Blink Your Eyes!" in large, bold text
 - Stays visible for the configured duration
 - Fades out smoothly
 - Covers all connected displays simultaneously
