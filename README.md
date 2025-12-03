@@ -9,6 +9,7 @@ A native macOS menu bar application that periodically displays a full-screen bli
 - ⚡ **Adjustable Duration**: Control how long the blink lasts (0.5-5.0 seconds)
 - 🌓 **Custom Opacity**: Set the transparency of the blink (10-100%)
 - 💬 **Visual Reminder**: "Blink Your Eyes!" text appears during the animation
+- ⏸️ **Pause/Resume**: Temporarily pause reminders when you need to focus
 - 🚀 **Launch at Login**: Automatically start when you log in
 - 🖥️ **Multi-Display Support**: Works across all connected displays
 - ✨ **Smooth Animations**: Gentle fade in/out effects
@@ -52,6 +53,7 @@ Click on the eye icon in the menu bar and select "Settings" to configure:
 Right-click (or click) the menu bar icon to access:
 
 - **Settings**: Open the settings window
+- **Pause/Resume**: Temporarily stop or restart the blink reminders
 - **Blink Now**: Trigger a blink immediately (useful for testing)
 - **Quit**: Exit the application
 

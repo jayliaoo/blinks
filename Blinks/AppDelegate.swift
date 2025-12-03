@@ -1,16 +1,18 @@
 import SwiftUI
 import ServiceManagement
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
     private var blinkTimer: Timer?
+    private var pauseMenuItem: NSMenuItem?
     
-    // Settings with UserDefaults persistence
-    @AppStorage("blinkInterval") private var blinkInterval: Double = 60.0 // 1 minute in seconds
-    @AppStorage("blinkDuration") private var blinkDuration: Double = 1.0 // 1.0 second
-    @AppStorage("blinkOpacity") private var blinkOpacity: Double = 0.5 // 50% transparency
-    @AppStorage("launchAtLogin") private var launchAtLogin: Bool = false
+    // Settings with UserDefaults persistence and real-time updates
+    @AppStorage("blinkInterval") var blinkInterval: Double = 60.0 // 1 minute in seconds
+    @AppStorage("blinkDuration") var blinkDuration: Double = 1.0 // 1.0 second
+    @AppStorage("blinkOpacity") var blinkOpacity: Double = 0.5 // 50% transparency
+    @AppStorage("launchAtLogin") var launchAtLogin: Bool = false
+    @AppStorage("isPaused") var isPaused: Bool = false
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Create menu bar item
@@ -18,21 +20,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "eye.fill", accessibilityDescription: "Blinks")
-            button.action = #selector(toggleSettings)
+            button.action = #selector(showMenu)
             button.target = self
         }
         
         // Create menu
+        updateMenu()
+        
+        // Start the blink timer if not paused
+        if !isPaused {
+            startBlinkTimer()
+        }
+    }
+    
+    private func updateMenu() {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Settings", action: #selector(toggleSettings), keyEquivalent: "s"))
+        menu.addItem(NSMenuItem.separator())
+        
+        // Pause/Resume menu item
+        let pauseTitle = isPaused ? "Resume" : "Pause"
+        pauseMenuItem = NSMenuItem(title: pauseTitle, action: #selector(togglePause), keyEquivalent: "p")
+        menu.addItem(pauseMenuItem!)
+        
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Blink Now", action: #selector(blinkNow), keyEquivalent: "b"))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q"))
         statusItem.menu = menu
-        
-        // Start the blink timer
-        startBlinkTimer()
+    }
+    
+    @objc func showMenu() {
+        updateMenu()
     }
     
     @objc func toggleSettings() {
@@ -45,18 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func showSettings() {
-        let settingsView = SettingsView(
-            blinkInterval: $blinkInterval,
-            blinkDuration: $blinkDuration,
-            blinkOpacity: $blinkOpacity,
-            launchAtLogin: $launchAtLogin,
-            onLaunchAtLoginChanged: { [weak self] enabled in
-                self?.setLaunchAtLogin(enabled)
-            },
-            onIntervalChanged: { [weak self] in
-                self?.restartBlinkTimer()
-            }
-        )
+        let settingsView = SettingsView(appDelegate: self)
         
         let hostingController = NSHostingController(rootView: settingsView)
         
@@ -77,18 +85,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         showBlinkAnimation()
     }
     
+    @objc func togglePause() {
+        isPaused.toggle()
+        
+        if isPaused {
+            // Stop the timer
+            blinkTimer?.invalidate()
+            blinkTimer = nil
+        } else {
+            // Resume the timer
+            startBlinkTimer()
+        }
+        
+        // Update menu
+        updateMenu()
+    }
+    
     @objc func quit() {
         NSApplication.shared.terminate(nil)
     }
     
     private func startBlinkTimer() {
+        guard !isPaused else { return }
         blinkTimer?.invalidate()
         blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkInterval, repeats: true) { [weak self] _ in
             self?.showBlinkAnimation()
         }
     }
     
-    private func restartBlinkTimer() {
+    func restartBlinkTimer() {
         startBlinkTimer()
     }
     
@@ -97,7 +122,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         blinkWindow.show()
     }
     
-    private func setLaunchAtLogin(_ enabled: Bool) {
+    func setLaunchAtLogin(_ enabled: Bool) {
         if #available(macOS 13.0, *) {
             do {
                 if enabled {

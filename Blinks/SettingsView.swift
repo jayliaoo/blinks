@@ -1,13 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @Binding var blinkInterval: Double
-    @Binding var blinkDuration: Double
-    @Binding var blinkOpacity: Double
-    @Binding var launchAtLogin: Bool
-    
-    let onLaunchAtLoginChanged: (Bool) -> Void
-    let onIntervalChanged: () -> Void
+    @ObservedObject var appDelegate: AppDelegate
     
     var body: some View {
         VStack(spacing: 20) {
@@ -25,16 +19,16 @@ struct SettingsView: View {
                         Text("Blink Interval:")
                             .fontWeight(.medium)
                         Spacer()
-                        Text(formatInterval(blinkInterval))
+                        Text(formatInterval(appDelegate.blinkInterval))
                             .foregroundColor(.secondary)
                             .fontWeight(.semibold)
                     }
                     
-                    Slider(value: $blinkInterval, in: 30...300, step: 30) {
+                    Slider(value: $appDelegate.blinkInterval, in: 30...300, step: 30) {
                         Text("Interval")
                     }
-                    .onChange(of: blinkInterval) { _ in
-                        onIntervalChanged()
+                    .onChange(of: appDelegate.blinkInterval) { _ in
+                        appDelegate.restartBlinkTimer()
                     }
                     
                     HStack {
@@ -56,12 +50,12 @@ struct SettingsView: View {
                         Text("Blink Duration:")
                             .fontWeight(.medium)
                         Spacer()
-                        Text(String(format: "%.1f sec", blinkDuration))
+                        Text(String(format: "%.1f sec", appDelegate.blinkDuration))
                             .foregroundColor(.secondary)
                             .fontWeight(.semibold)
                     }
                     
-                    Slider(value: $blinkDuration, in: 0.5...5.0, step: 0.5) {
+                    Slider(value: $appDelegate.blinkDuration, in: 0.5...5.0, step: 0.5) {
                         Text("Duration")
                     }
                     
@@ -84,12 +78,12 @@ struct SettingsView: View {
                         Text("Opacity:")
                             .fontWeight(.medium)
                         Spacer()
-                        Text("\(Int(blinkOpacity * 100))%")
+                        Text("\(Int(appDelegate.blinkOpacity * 100))%")
                             .foregroundColor(.secondary)
                             .fontWeight(.semibold)
                     }
                     
-                    Slider(value: $blinkOpacity, in: 0.1...1.0, step: 0.05) {
+                    Slider(value: $appDelegate.blinkOpacity, in: 0.1...1.0, step: 0.05) {
                         Text("Opacity")
                     }
                     
@@ -108,10 +102,10 @@ struct SettingsView: View {
                 
                 // Launch at Login
                 Toggle(isOn: Binding(
-                    get: { launchAtLogin },
+                    get: { appDelegate.launchAtLogin },
                     set: { newValue in
-                        launchAtLogin = newValue
-                        onLaunchAtLoginChanged(newValue)
+                        appDelegate.launchAtLogin = newValue
+                        appDelegate.setLaunchAtLogin(newValue)
                     }
                 )) {
                     Text("Launch at Login")
@@ -149,13 +143,8 @@ struct SettingsView: View {
     }
 }
 
+
 #Preview {
-    SettingsView(
-        blinkInterval: .constant(60),
-        blinkDuration: .constant(1.0),
-        blinkOpacity: .constant(0.5),
-        launchAtLogin: .constant(false),
-        onLaunchAtLoginChanged: { _ in },
-        onIntervalChanged: { }
-    )
+    let appDelegate = AppDelegate()
+    return SettingsView(appDelegate: appDelegate)
 }
