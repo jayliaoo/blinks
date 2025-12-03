@@ -128,12 +128,20 @@ struct SettingsView: View {
     }
     
     private func formatInterval(_ seconds: Double) -> String {
-        let minutes = Int(seconds / 60)
+        let minutes = seconds / 60.0
+        
         if minutes < 60 {
-            return "\(minutes) min"
+            // Show one decimal place for minutes
+            if minutes.truncatingRemainder(dividingBy: 1) == 0 {
+                // Whole number, no decimal
+                return String(format: "%.0f min", minutes)
+            } else {
+                // Has decimal, show it
+                return String(format: "%.1f min", minutes)
+            }
         } else {
-            let hours = minutes / 60
-            let remainingMinutes = minutes % 60
+            let hours = Int(minutes / 60)
+            let remainingMinutes = Int(minutes.truncatingRemainder(dividingBy: 60))
             if remainingMinutes == 0 {
                 return "\(hours) hr"
             } else {
