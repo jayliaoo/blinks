@@ -131,7 +131,7 @@ struct SettingsView: View {
                                     .fontWeight(.semibold)
                             }
                             
-                            Slider(value: $appDelegate.eyeDropInterval, in: 900...7200, step: 300) {
+                            Slider(value: $appDelegate.eyeDropInterval, in: 60...7200, step: 60) {
                                 Text("Eye Drop Interval")
                             }
                             .onChange(of: appDelegate.eyeDropInterval) { _ in
@@ -139,7 +139,7 @@ struct SettingsView: View {
                             }
                             
                             HStack {
-                                Text("15 min")
+                                Text("1 min")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Spacer()

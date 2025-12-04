@@ -9,7 +9,7 @@ A native macOS menu bar application that periodically displays a full-screen bli
 - ⚡ **Adjustable Duration**: Control how long the blink lasts (0.5-5.0 seconds)
 - 🌓 **Custom Opacity**: Set the transparency of the blink (10-100%)
 - 💬 **Visual Reminder**: "Blink Your Eyes!" text appears during the animation
-- 💧 **Eye Drop Reminder**: Configurable reminders to use eye drops (15-120 minutes)
+- 💧 **Eye Drop Reminder**: Configurable reminders to use eye drops (1-120 minutes)
   - Interactive popup with Done and Snooze (5 min) options
   - Synchronized with blink reminder pause state
 - ⏸️ **Pause/Resume**: Temporarily pause reminders when you need to focus
@@ -45,15 +45,13 @@ Click the eye icon and select "Settings" to configure:
 - **Blink Duration**: How long the blink lasts (0.5-5.0 seconds, default: 1.0 second)
 - **Opacity**: How dark the blink is (10-100%, default: 50%)
 - **Eye Drop Reminder**: Enable/disable eye drop reminders (default: enabled)
-  - **Reminder Interval**: How often to remind you to use eye drops (15-120 minutes, default: 30 minutes)
+  - **Reminder Interval**: How often to remind you to use eye drops (1-120 minutes, default: 30 minutes)
 - **Launch at Login**: Enable to start automatically when you log in
 
 ### Menu Options
 
 - **Settings** (Cmd+S): Open the settings window
 - **Pause/Resume** (Cmd+P): Temporarily stop or restart both blink and eye drop reminders
-- **Blink Now** (Cmd+B): Trigger a blink immediately (useful for testing)
-- **Test Eye Drop Reminder** (Cmd+D): Trigger the eye drop reminder immediately (useful for testing)
 - **Quit** (Cmd+Q): Exit the application
 
 ## Recommended Settings
@@ -214,7 +212,7 @@ Rectangle()
 ### December 4, 2025 - Eye Drop Reminder
 
 - **New Feature**: Eye drop reminder functionality
-  - Configurable interval (15-120 minutes, default: 30 minutes)
+  - Configurable interval (1-120 minutes, default: 30 minutes)
   - Interactive popup window with Done and Snooze buttons
   - Snooze delays the reminder by 5 minutes
   - Enable/disable toggle in settings

@@ -48,9 +48,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         menu.addItem(pauseMenuItem!)
         
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Blink Now", action: #selector(blinkNow), keyEquivalent: "b"))
-        menu.addItem(NSMenuItem(title: "Test Eye Drop Reminder", action: #selector(testEyeDropReminder), keyEquivalent: "d"))
-        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q"))
         statusItem.menu = menu
     }
