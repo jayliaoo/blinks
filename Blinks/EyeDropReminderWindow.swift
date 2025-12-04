@@ -32,7 +32,7 @@ class EyeDropReminderWindow {
         window.backgroundColor = NSColor(red: 0.1, green: 0.1, blue: 0.15, alpha: 0.95)
         window.isOpaque = false
         window.hasShadow = true
-        window.setContentSize(NSSize(width: 400, height: 280))
+        window.setContentSize(NSSize(width: 450, height: 340))
         window.center()
         
         // Show the window
@@ -78,20 +78,23 @@ struct EyeDropReminderView: View {
                         .font(.system(size: 50))
                         .foregroundColor(.white)
                 }
-                .padding(.top, 20)
+                .padding(.top, 30)
                 
                 // Title
                 Text("Time for Eye Drops!")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
                 
                 // Message
                 Text("Don't forget to use your eye drops to keep your eyes healthy and comfortable.")
                     .font(.system(size: 14))
                     .foregroundColor(.white.opacity(0.9))
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 30)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 40)
                 
                 // Buttons
                 HStack(spacing: 20) {
@@ -136,10 +139,12 @@ struct EyeDropReminderView: View {
                         NSCursor.pointingHand.set()
                     }
                 }
-                .padding(.bottom, 20)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 30)
             }
+            .padding(.vertical, 10)
         }
-        .frame(width: 400, height: 280)
+        .frame(width: 450, height: 340)
     }
 }
 
