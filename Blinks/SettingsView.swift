@@ -131,7 +131,7 @@ struct SettingsView: View {
                                     .fontWeight(.semibold)
                             }
                             
-                            Slider(value: $appDelegate.eyeDropInterval, in: 60...7200, step: 60) {
+                            Slider(value: $appDelegate.eyeDropInterval, in: 300...7200, step: 300) {
                                 Text("Eye Drop Interval")
                             }
                             .onChange(of: appDelegate.eyeDropInterval) { _ in
@@ -139,7 +139,7 @@ struct SettingsView: View {
                             }
                             
                             HStack {
-                                Text("1 min")
+                                Text("5 min")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Spacer()
@@ -164,7 +164,7 @@ struct SettingsView: View {
                             }
                             
                             // Snooze duration must be less than interval
-                            let maxSnooze = min(appDelegate.eyeDropInterval, 3600) // Max 60 min or interval-1min
+                            let maxSnooze = min(appDelegate.eyeDropInterval, 1800) // Max 30 min or interval
                             Slider(value: $appDelegate.eyeDropSnoozeDuration, in: 60...maxSnooze, step: 60) {
                                 Text("Snooze Duration")
                             }
