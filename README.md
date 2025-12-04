@@ -115,6 +115,27 @@ Click the eye icon and select "Settings" to configure:
 1. Try quitting and relaunching the app
 2. Check Console.app for any error messages
 
+## Testing
+
+1. **Basic Functionality**:
+
+   - Enable eye drop reminders
+   - Set interval to 5 minutes (minimum)
+   - Wait for reminder to appear
+   - Test both Done and Snooze buttons
+
+2. **Pause Integration**:
+
+   - Enable both reminders
+   - Pause using menu bar
+   - Verify no reminders appear
+   - Resume and verify both work
+
+3. **Settings Persistence**:
+   - Change eye drop interval
+   - Quit and relaunch app
+   - Verify settings are preserved
+
 ## Technical Details
 
 ### Architecture
@@ -178,6 +199,14 @@ All settings are stored in UserDefaults:
 - `eyeDropEnabled`: Whether eye drop reminders are enabled (boolean)
 - `launchAtLogin`: Whether to start at login (boolean)
 - `isPaused`: Pause state (boolean)
+
+### Timer Logic
+
+1. **Normal Operation**: Timer fires every `eyeDropInterval` seconds
+2. **On Done**: Restarts normal timer
+3. **On Snooze**: Creates one-time timer for the configured snooze duration
+4. **On Pause**: Both blink and eye drop timers are invalidated
+5. **On Resume**: Both timers restart with their configured intervals
 
 ### Permissions Required
 
@@ -253,6 +282,14 @@ Rectangle()
 - Professional app icon with eye symbol
 - Vibrant blue-to-purple gradient background
 - All required sizes for macOS (16x16 to 1024x1024)
+
+## Future Enhancements
+
+1. **Multiple Snooze Options**: Quick buttons for 5, 10, 15 minutes
+2. **Usage Statistics**: Track how often eye drops are used
+3. **Custom Messages**: Allow users to customize reminder text
+4. **Sound Notifications**: Optional audio alert
+5. **History Log**: Keep track of when eye drops were used
 
 ## License
 
