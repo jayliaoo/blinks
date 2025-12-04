@@ -14,12 +14,12 @@ class EyeDropReminderWindow {
     func show() {
         let reminderView = EyeDropReminderView(
             onDone: { [weak self] in
-                self?.onDone?()
                 self?.close()
+                self?.onDone?()
             },
             onSnooze: { [weak self] in
-                self?.onSnooze?()
                 self?.close()
+                self?.onSnooze?()
             }
         )
         
@@ -103,7 +103,7 @@ struct EyeDropReminderView: View {
                         HStack {
                             Image(systemName: "clock.arrow.circlepath")
                                 .font(.system(size: 16))
-                            Text("Snooze 5 min")
+                            Text("Snooze")
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
