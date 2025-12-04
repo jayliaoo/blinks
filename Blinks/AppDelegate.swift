@@ -6,6 +6,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var settingsWindow: NSWindow?
     private var blinkTimer: Timer?
     private var eyeDropTimer: Timer?
+    private var eyeDropReminderWindow: EyeDropReminderWindow?
     private var pauseMenuItem: NSMenuItem?
     
     // Settings with UserDefaults persistence and real-time updates
@@ -13,6 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @AppStorage("blinkDuration") var blinkDuration: Double = 1.0 // 1.0 second
     @AppStorage("blinkOpacity") var blinkOpacity: Double = 0.5 // 50% transparency
     @AppStorage("eyeDropInterval") var eyeDropInterval: Double = 1800.0 // 30 minutes in seconds
+    @AppStorage("eyeDropSnoozeDuration") var eyeDropSnoozeDuration: Double = 300.0 // 5 minutes in seconds
     @AppStorage("eyeDropEnabled") var eyeDropEnabled: Bool = true
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false
     @AppStorage("isPaused") var isPaused: Bool = false
@@ -73,7 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         let window = NSWindow(contentViewController: hostingController)
         window.title = "Blinks Settings"
         window.styleMask = [.titled, .closable, .miniaturizable]
-        window.setContentSize(NSSize(width: 400, height: 550))
+        window.setContentSize(NSSize(width: 400, height: 630))
         window.center()
         window.makeKeyAndOrderFront(nil)
         
@@ -160,22 +162,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     private func showEyeDropReminder() {
-        let reminderWindow = EyeDropReminderWindow(
+        eyeDropReminderWindow = EyeDropReminderWindow(
             onDone: { [weak self] in
                 // User marked as done, just restart the normal timer
+                self?.eyeDropReminderWindow = nil
                 self?.restartEyeDropTimer()
             },
             onSnooze: { [weak self] in
-                // Snooze for 5 minutes
+                // Snooze for configured duration
+                self?.eyeDropReminderWindow = nil
                 self?.snoozeEyeDropReminder()
             }
         )
-        reminderWindow.show()
+        eyeDropReminderWindow?.show()
     }
     
     private func snoozeEyeDropReminder() {
         eyeDropTimer?.invalidate()
-        eyeDropTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: false) { [weak self] _ in
+        eyeDropTimer = Timer.scheduledTimer(withTimeInterval: eyeDropSnoozeDuration, repeats: false) { [weak self] _ in
             self?.showEyeDropReminder()
         }
     }

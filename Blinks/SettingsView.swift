@@ -149,6 +149,37 @@ struct SettingsView: View {
                             }
                         }
                         .padding(.leading, 20)
+                        
+                        // Snooze Duration Slider
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Snooze Duration:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(formatInterval(appDelegate.eyeDropSnoozeDuration))
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            // Snooze duration must be less than interval
+                            let maxSnooze = min(appDelegate.eyeDropInterval, 3600) // Max 60 min or interval-1min
+                            Slider(value: $appDelegate.eyeDropSnoozeDuration, in: 60...maxSnooze, step: 60) {
+                                Text("Snooze Duration")
+                            }
+                            
+                            HStack {
+                                Text("1 min")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(formatInterval(maxSnooze))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.leading, 20)
                     }
                 }
                 
@@ -178,7 +209,7 @@ struct SettingsView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
         }
-        .frame(width: 400, height: 550)
+        .frame(width: 400, height: 630)
     }
     
     private func formatInterval(_ seconds: Double) -> String {

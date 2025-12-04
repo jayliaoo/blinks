@@ -10,7 +10,7 @@ A native macOS menu bar application that periodically displays a full-screen bli
 - 🌓 **Custom Opacity**: Set the transparency of the blink (10-100%)
 - 💬 **Visual Reminder**: "Blink Your Eyes!" text appears during the animation
 - 💧 **Eye Drop Reminder**: Configurable reminders to use eye drops (1-120 minutes)
-  - Interactive popup with Done and Snooze (5 min) options
+  - Interactive popup with Done and Snooze (configurable duration) options
   - Synchronized with blink reminder pause state
 - ⏸️ **Pause/Resume**: Temporarily pause reminders when you need to focus
 - 🚀 **Launch at Login**: Automatically start when you log in
@@ -46,6 +46,7 @@ Click the eye icon and select "Settings" to configure:
 - **Opacity**: How dark the blink is (10-100%, default: 50%)
 - **Eye Drop Reminder**: Enable/disable eye drop reminders (default: enabled)
   - **Reminder Interval**: How often to remind you to use eye drops (1-120 minutes, default: 30 minutes)
+  - **Snooze Duration**: How long to delay when snoozed (1 minute to interval-1, default: 5 minutes)
 - **Launch at Login**: Enable to start automatically when you log in
 
 ### Menu Options
@@ -172,7 +173,8 @@ All settings are stored in UserDefaults:
 - `blinkInterval`: Time between blinks (30-300 seconds)
 - `blinkDuration`: How long each blink lasts (0.5-5.0 seconds)
 - `blinkOpacity`: Transparency level (0.1-1.0)
-- `eyeDropInterval`: Time between eye drop reminders (900-7200 seconds)
+- `eyeDropInterval`: Time between eye drop reminders (60-7200 seconds)
+- `eyeDropSnoozeDuration`: Snooze delay duration (60 seconds to interval-60)
 - `eyeDropEnabled`: Whether eye drop reminders are enabled (boolean)
 - `launchAtLogin`: Whether to start at login (boolean)
 - `isPaused`: Pause state (boolean)
