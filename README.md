@@ -53,6 +53,7 @@ Click the eye icon and select "Settings" to configure:
 - **Settings** (Cmd+S): Open the settings window
 - **Pause/Resume** (Cmd+P): Temporarily stop or restart both blink and eye drop reminders
 - **Blink Now** (Cmd+B): Trigger a blink immediately (useful for testing)
+- **Test Eye Drop Reminder** (Cmd+D): Trigger the eye drop reminder immediately (useful for testing)
 - **Quit** (Cmd+Q): Exit the application
 
 ## Recommended Settings
