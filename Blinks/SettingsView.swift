@@ -100,6 +100,60 @@ struct SettingsView: View {
                 
                 Divider()
                 
+                // Eye Drop Reminder Section
+                VStack(alignment: .leading, spacing: 12) {
+                    // Enable/Disable Toggle
+                    Toggle(isOn: Binding(
+                        get: { appDelegate.eyeDropEnabled },
+                        set: { newValue in
+                            appDelegate.eyeDropEnabled = newValue
+                            if newValue && !appDelegate.isPaused {
+                                appDelegate.restartEyeDropTimer()
+                            }
+                        }
+                    )) {
+                        Text("Eye Drop Reminder")
+                            .fontWeight(.medium)
+                    }
+                    .toggleStyle(.switch)
+                    
+                    // Interval Slider (only shown when enabled)
+                    if appDelegate.eyeDropEnabled {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Reminder Interval:")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text(formatInterval(appDelegate.eyeDropInterval))
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            Slider(value: $appDelegate.eyeDropInterval, in: 900...7200, step: 300) {
+                                Text("Eye Drop Interval")
+                            }
+                            .onChange(of: appDelegate.eyeDropInterval) { _ in
+                                appDelegate.restartEyeDropTimer()
+                            }
+                            
+                            HStack {
+                                Text("15 min")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("120 min")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.leading, 20)
+                    }
+                }
+                
+                Divider()
+                
                 // Launch at Login
                 Toggle(isOn: Binding(
                     get: { appDelegate.launchAtLogin },
@@ -124,7 +178,7 @@ struct SettingsView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
         }
-        .frame(width: 400, height: 350)
+        .frame(width: 400, height: 550)
     }
     
     private func formatInterval(_ seconds: Double) -> String {

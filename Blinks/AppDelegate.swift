@@ -5,12 +5,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
     private var blinkTimer: Timer?
+    private var eyeDropTimer: Timer?
     private var pauseMenuItem: NSMenuItem?
     
     // Settings with UserDefaults persistence and real-time updates
     @AppStorage("blinkInterval") var blinkInterval: Double = 60.0 // 1 minute in seconds
     @AppStorage("blinkDuration") var blinkDuration: Double = 1.0 // 1.0 second
     @AppStorage("blinkOpacity") var blinkOpacity: Double = 0.5 // 50% transparency
+    @AppStorage("eyeDropInterval") var eyeDropInterval: Double = 1800.0 // 30 minutes in seconds
+    @AppStorage("eyeDropEnabled") var eyeDropEnabled: Bool = true
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false
     @AppStorage("isPaused") var isPaused: Bool = false
     
@@ -30,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         // Start the blink timer if not paused
         if !isPaused {
             startBlinkTimer()
+            startEyeDropTimer()
         }
     }
     
@@ -71,7 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         let window = NSWindow(contentViewController: hostingController)
         window.title = "Blinks Settings"
         window.styleMask = [.titled, .closable, .miniaturizable]
-        window.setContentSize(NSSize(width: 400, height: 350))
+        window.setContentSize(NSSize(width: 400, height: 550))
         window.center()
         window.makeKeyAndOrderFront(nil)
         
@@ -89,12 +93,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         isPaused.toggle()
         
         if isPaused {
-            // Stop the timer
+            // Stop both timers
             blinkTimer?.invalidate()
             blinkTimer = nil
+            eyeDropTimer?.invalidate()
+            eyeDropTimer = nil
         } else {
-            // Resume the timer
+            // Resume both timers
             startBlinkTimer()
+            startEyeDropTimer()
         }
         
         // Update menu
@@ -133,6 +140,41 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             } catch {
                 print("Failed to \(enabled ? "enable" : "disable") launch at login: \(error)")
             }
+        }
+    }
+    
+    // MARK: - Eye Drop Reminder
+    
+    private func startEyeDropTimer() {
+        guard !isPaused && eyeDropEnabled else { return }
+        eyeDropTimer?.invalidate()
+        eyeDropTimer = Timer.scheduledTimer(withTimeInterval: eyeDropInterval, repeats: true) { [weak self] _ in
+            self?.showEyeDropReminder()
+        }
+    }
+    
+    func restartEyeDropTimer() {
+        startEyeDropTimer()
+    }
+    
+    private func showEyeDropReminder() {
+        let reminderWindow = EyeDropReminderWindow(
+            onDone: { [weak self] in
+                // User marked as done, just restart the normal timer
+                self?.restartEyeDropTimer()
+            },
+            onSnooze: { [weak self] in
+                // Snooze for 5 minutes
+                self?.snoozeEyeDropReminder()
+            }
+        )
+        reminderWindow.show()
+    }
+    
+    private func snoozeEyeDropReminder() {
+        eyeDropTimer?.invalidate()
+        eyeDropTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: false) { [weak self] _ in
+            self?.showEyeDropReminder()
         }
     }
 }

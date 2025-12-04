@@ -12,6 +12,7 @@
 		A1000005000000000000001 /* BlinkWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000006000000000000001 /* BlinkWindow.swift */; };
 		A1000007000000000000001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000008000000000000001 /* SettingsView.swift */; };
 		A1000009000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000010000000000000001 /* AppDelegate.swift */; };
+		A1000030000000000000001 /* EyeDropReminderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000031000000000000001 /* EyeDropReminderWindow.swift */; };
 		A1000011000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000012000000000000001 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -22,6 +23,7 @@
 		A1000006000000000000001 /* BlinkWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkWindow.swift; sourceTree = "<group>"; };
 		A1000008000000000000001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A1000010000000000000001 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A1000031000000000000001 /* EyeDropReminderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeDropReminderWindow.swift; sourceTree = "<group>"; };
 		A1000012000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1000014000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000015000000000000001 /* Blinks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blinks.entitlements; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 				A1000004000000000000001 /* ContentView.swift */,
 				A1000008000000000000001 /* SettingsView.swift */,
 				A1000006000000000000001 /* BlinkWindow.swift */,
+				A1000031000000000000001 /* EyeDropReminderWindow.swift */,
 				A1000012000000000000001 /* Assets.xcassets */,
 				A1000014000000000000001 /* Info.plist */,
 				A1000015000000000000001 /* Blinks.entitlements */,
@@ -143,6 +146,7 @@
 				A1000005000000000000001 /* BlinkWindow.swift in Sources */,
 				A1000007000000000000001 /* SettingsView.swift in Sources */,
 				A1000009000000000000001 /* AppDelegate.swift in Sources */,
+				A1000030000000000000001 /* EyeDropReminderWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
