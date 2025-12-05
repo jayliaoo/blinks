@@ -162,6 +162,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     private func showEyeDropReminder() {
+        eyeDropTimer?.invalidate()
         eyeDropReminderWindow = EyeDropReminderWindow(
             onDone: { [weak self] in
                 // User marked as done, just restart the normal timer
