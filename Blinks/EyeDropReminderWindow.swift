@@ -27,7 +27,7 @@ class EyeDropReminderWindow {
         
         let window = NSWindow(contentViewController: hostingController)
         window.title = "Eye Drop Reminder"
-        window.styleMask = [.titled, .closable, .fullSizeContentView]
+        window.styleMask = [.titled, .fullSizeContentView]
         window.level = .floating // Stay on top
         window.backgroundColor = NSColor(red: 0.1, green: 0.1, blue: 0.15, alpha: 0.95)
         window.isOpaque = false
