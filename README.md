@@ -1,304 +1,105 @@
 # Blinks - Eye Rest Reminder for macOS
 
-A native macOS menu bar application that periodically displays a full-screen blink animation to remind you to rest your eyes.
+A native macOS menu bar application designed to reduce eye strain by periodically reminding you to blink and take breaks. It features a subtle full-screen blink animation and a dedicated eye drop reminder system.
 
 ## Features
 
-- 🎯 **Menu Bar App**: Lives in your menu bar, stays out of your way
-- ⏰ **Configurable Interval**: Set how often you want to be reminded (0.5-5 minutes)
-- ⚡ **Adjustable Duration**: Control how long the blink lasts (0.5-5.0 seconds)
-- 🌓 **Custom Opacity**: Set the transparency of the blink (10-100%)
-- 💬 **Visual Reminder**: "Blink Your Eyes!" text appears during the animation
-- 💧 **Eye Drop Reminder**: Configurable reminders to use eye drops (1-120 minutes)
-  - Interactive popup with Done and Snooze (configurable duration) options
-  - Synchronized with blink reminder pause state
-- ⏸️ **Pause/Resume**: Temporarily pause reminders when you need to focus
-- 🚀 **Launch at Login**: Automatically start when you log in
-- 🖥️ **Multi-Display Support**: Works across all connected displays
-- ✨ **Smooth Animations**: Gentle fade in/out effects
+### 👁️ Blink Reminder
+
+- **Full-Screen Animation**: A periodic, gentle full-screen blink animation that mimics the closing of eyes.
+- **Customizable Interval**: Set reminders every 0.5 to 5 minutes.
+- **Adjustable Duration**: Control how long the blink lasts (0.5 to 5.0 seconds).
+- **Opactity Control**: detailed control over the darkness of the blink (10% to 100%).
+- **Visual Cue**: Displays "Blink Your Eyes!" during the animation to reinforce the habit.
+
+### 💧 Eye Drop Reminder
+
+- **Dedicated Timer**: Separate configurable timer for eye drops (5 to 120 minutes).
+- **Forced Interaction**: The reminder window stays on top and cannot be closed without action, ensuring you don't accidentally ignore it.
+- **Smart Snooze**: Snooze the reminder for a short duration (configurable up to 30 mins) if you're in the middle of a task.
+- ** synchronized Pausing**: Pausing the main blink reminder also pauses the eye drop timer.
+
+### ⚙️ Application Control
+
+- **Menu Bar Request**: unobtrusive icon in the macOS menu bar.
+- **Pause/Resume**: Quickly toggle all functionality with `Cmd+P` or via the menu (useful for meetings or movies).
+- **Launch at Login**: Option to automatically start the app when you sign in (requires macOS 13+).
+- **Multi-Display Support**: The blink animation covers all connected displays.
+- **Battery Friendly**: Efficient native Swift implementation.
 
 ## Requirements
 
-- macOS 13.0 or later
-- Xcode 15.0 or later (for building)
+- macOS 13.0 or later (for Launch at Login support).
+- Xcode 15.0+ (to build from source).
 
 ## Quick Start
 
 ### Building and Running
 
-1. Open the project in Xcode:
+1.  **Clone and Open**:
 
-   ```bash
-   open Blinks.xcodeproj
-   # or run: ./build.sh
-   ```
+    ```bash
+    git clone https://github.com/jayliaoo/blinks.git
+    cd blinks
+    open Blinks.xcodeproj
+    ```
 
-2. Select the "Blinks" scheme and press `Cmd + R` to build and run
+    _Alternatively, verify the integrity of the build script:_ `cat build.sh`
 
-3. Look for the **eye icon (👁️)** in your menu bar
+2.  **Build**:
+    Select the "Blinks" scheme in Xcode and press `Cmd + R` to run.
+
+3.  **Use**:
+    Look for the eye icon (👁️) in your menu bar.
 
 ### Configuration
 
-Click the eye icon and select "Settings" to configure:
+Click the menu bar icon and select **Settings** (`Cmd + S`) to customize:
 
-- **Blink Interval**: How often the blink appears (0.5-5 minutes, default: 1 minute)
-- **Blink Duration**: How long the blink lasts (0.5-5.0 seconds, default: 1.0 second)
-- **Opacity**: How dark the blink is (10-100%, default: 50%)
-- **Eye Drop Reminder**: Enable/disable eye drop reminders (default: enabled)
-  - **Reminder Interval**: How often to remind you to use eye drops (1-120 minutes, default: 30 minutes)
-  - **Snooze Duration**: How long to delay when snoozed (1 minute to interval-1, default: 5 minutes)
-- **Launch at Login**: Enable to start automatically when you log in
-
-### Menu Options
-
-- **Settings** (Cmd+S): Open the settings window
-- **Pause/Resume** (Cmd+P): Temporarily stop or restart both blink and eye drop reminders
-- **Quit** (Cmd+Q): Exit the application
-
-## Recommended Settings
-
-### For Intensive Work (Frequent Breaks)
-
-- **Interval**: 1-2 minutes
-- **Duration**: 1.0-2.0 seconds
-- **Opacity**: 60-80%
-
-### For Normal Work (Regular Reminders)
-
-- **Interval**: 2-3 minutes
-- **Duration**: 1.0-1.5 seconds
-- **Opacity**: 50-70%
-
-### For Light Work (Gentle Reminders)
-
-- **Interval**: 4-5 minutes
-- **Duration**: 0.5-1.0 seconds
-- **Opacity**: 30-50%
-
-## Distribution
-
-### For Personal Use
-
-1. Build the app (Cmd + R)
-2. In Finder, go to: `~/Library/Developer/Xcode/DerivedData/Blinks-*/Build/Products/Debug/`
-3. Copy `Blinks.app` to your Applications folder
-
-### For Sharing
-
-1. In Xcode, select **Product > Archive**
-2. Click **Distribute App** > **Copy App**
-3. Select a location to save
-4. Share the .app bundle
+- **Blink Interval**: Frequency of the full-screen blink.
+- **Blink Duration**: Length of the animation.
+- **Opacity**: Darkness level of the overlay.
+- **Eye Drop Reminder**: Toggle and configure the interval (5-120 mins) and snooze duration.
+- **Launch at Login**: Auto-start preference.
 
 ## Troubleshooting
 
-### The blink doesn't appear
+- **Blink Overlay Not Appearing**: Ensure "Blinks" is enabled in **System Settings > Privacy & Security > Screen Recording**. This permission is required to draw over other windows.
+- **Menu Icon Missing**: If you have many menu bar apps, the icon might be hidden by the notch on newer MacBooks. Try closing other apps.
 
-1. Go to **System Settings > Privacy & Security > Screen Recording**
-2. Enable **Blinks**
-3. Restart the app
+## Key Shortcuts
 
-### Can't find the menu bar icon
-
-1. Check if the menu bar is full (macOS hides icons when space is limited)
-2. Quit some other menu bar apps to free up space
-3. Restart Blinks
-
-### Launch at login doesn't work
-
-1. Go to **System Settings > General > Login Items**
-2. Look for **Blinks** in the list
-3. Toggle the setting off and on again in the app
-
-### Settings don't save
-
-1. Try quitting and relaunching the app
-2. Check Console.app for any error messages
-
-## Testing
-
-1. **Basic Functionality**:
-
-   - Enable eye drop reminders
-   - Set interval to 5 minutes (minimum)
-   - Wait for reminder to appear
-   - Test both Done and Snooze buttons
-
-2. **Pause Integration**:
-
-   - Enable both reminders
-   - Pause using menu bar
-   - Verify no reminders appear
-   - Resume and verify both work
-
-3. **Settings Persistence**:
-   - Change eye drop interval
-   - Quit and relaunch app
-   - Verify settings are preserved
+- **`Cmd + S`**: Open Settings
+- **`Cmd + P`**: Pause/Resume All Reminders
+- **`Cmd + Q`**: Quit Application
 
 ## Technical Details
 
-### Architecture
+**Architecture**:
 
-The app is built with:
+- **Language**: Swift 5
+- **UI Framework**: SwiftUI (Settings & Reminders) + AppKit (Window Management)
+- **State Management**: `ObservableObject` pattern in `AppDelegate` for real-time setting updates.
+- **Storage**: `UserDefaults` for lightweight persistence.
 
-- **SwiftUI**: Modern declarative UI framework for the settings interface
-- **AppKit**: Native macOS framework for menu bar and window management
-- **ServiceManagement**: For launch at login functionality
-- **UserDefaults**: Persistent storage for user preferences
+**Project Structure**:
 
-### Key Components
-
-- `BlinksApp.swift`: App entry point
-- `AppDelegate.swift`: Menu bar management, timer logic, and ObservableObject for real-time updates
-- `SettingsView.swift`: SwiftUI settings interface with live value updates
-- `BlinkWindow.swift`: Full-screen overlay window with fade animations
-- `EyeDropReminderWindow.swift`: Interactive eye drop reminder popup
-
-### Project Structure
-
-```
+```text
 blinks/
-├── README.md                    # This file
-├── build.sh                     # Build helper script
-├── Blinks.xcodeproj/            # Xcode project
-└── Blinks/                      # Source code
-    ├── BlinksApp.swift          # App entry point
-    ├── AppDelegate.swift        # Core logic
-    ├── SettingsView.swift       # Settings UI
-    ├── BlinkWindow.swift        # Blink overlay
-    ├── EyeDropReminderWindow.swift  # Eye drop reminder popup
-    ├── Info.plist               # App configuration
-    ├── Blinks.entitlements      # App permissions
-    └── Assets.xcassets/         # App icon and assets
+├── Blinks/
+│   ├── AppDelegate.swift        # Main logic & menu bar management
+│   ├── SettingsView.swift       # SwiftUI configuration screen
+│   ├── BlinkWindow.swift        # The overlay animation window
+│   ├── EyeDropReminderWindow.swift # The floating reminder window
+│   └── BlinksApp.swift          # App entry point
+├── Blinks.xcodeproj/            # Xcode project files
+└── build.sh                     # CLI build script
 ```
-
-### Data Flow
-
-```
-User → Menu Bar → AppDelegate (ObservableObject)
-                       ↓
-                  SettingsView (@ObservedObject)
-                       ↓
-                  Real-time Updates
-                       ↓
-                  Timer → BlinkWindow
-                       ↓
-                  Full Screen Overlay
-```
-
-### Settings Persistence
-
-All settings are stored in UserDefaults:
-
-- `blinkInterval`: Time between blinks (30-300 seconds)
-- `blinkDuration`: How long each blink lasts (0.5-5.0 seconds)
-- `blinkOpacity`: Transparency level (0.1-1.0)
-- `eyeDropInterval`: Time between eye drop reminders (60-7200 seconds)
-- `eyeDropSnoozeDuration`: Snooze delay duration (60 seconds to interval-60)
-- `eyeDropEnabled`: Whether eye drop reminders are enabled (boolean)
-- `launchAtLogin`: Whether to start at login (boolean)
-- `isPaused`: Pause state (boolean)
-
-### Timer Logic
-
-1. **Normal Operation**: Timer fires every `eyeDropInterval` seconds
-2. **On Done**: Restarts normal timer
-3. **On Snooze**: Creates one-time timer for the configured snooze duration
-4. **On Pause**: Both blink and eye drop timers are invalidated
-5. **On Resume**: Both timers restart with their configured intervals
-
-### Permissions Required
-
-- **Screen Recording**: For full-screen overlay (automatically requested on first blink)
-- **Login Items**: For launch at login (requested when user enables the feature)
-
-## Customization
-
-### Changing the Blink Color
-
-In `BlinkWindow.swift`, modify:
-
-```swift
-Rectangle()
-    .fill(Color.black.opacity(opacity))
-```
-
-To any color you prefer:
-
-```swift
-Rectangle()
-    .fill(Color.blue.opacity(opacity))  // or any color
-```
-
-### Other Customization Ideas
-
-- Add sound effects
-- Show custom messages during the blink
-- Add different animation styles
-- Integrate with other health apps
-
-## Recent Updates
-
-### December 4, 2025 - Eye Drop Reminder
-
-- **New Feature**: Eye drop reminder functionality
-  - Configurable interval (1-120 minutes, default: 30 minutes)
-  - Interactive popup window with Done and Snooze buttons
-  - Snooze delays the reminder by 5 minutes
-  - Enable/disable toggle in settings
-  - Synchronized with blink reminder pause state
-- **UI Improvements**: Modern gradient design for eye drop reminder popup
-- **Settings Window**: Expanded to accommodate new eye drop settings
-
-### December 3, 2025 - Core Features
-
-### Real-Time Value Display
-
-- Settings values now update in real-time as sliders are moved
-- Made `AppDelegate` conform to `ObservableObject`
-- Updated `SettingsView` to use `@ObservedObject` for live updates
-
-### Pause/Resume Feature
-
-- Added ability to pause and resume blink reminders (Cmd+P)
-- Pause state persists across app restarts
-- Menu item text changes dynamically based on state
-
-### Updated Ranges
-
-- **Interval**: Changed from 1-60 minutes to 0.5-5 minutes (more frequent reminders)
-- **Duration**: Changed from 0.1-3.0 seconds to 0.5-5.0 seconds (better visibility)
-- Values display in semibold font for better readability
-
-### Visual Improvements
-
-- Added "Blink Your Eyes!" text overlay during blink animation
-- Large, bold text (72pt) with subtle shadow
-- Decimal interval display (e.g., "1.5 min" instead of "1 min")
-
-### App Icon
-
-- Professional app icon with eye symbol
-- Vibrant blue-to-purple gradient background
-- All required sizes for macOS (16x16 to 1024x1024)
-
-## Future Enhancements
-
-1. **Multiple Snooze Options**: Quick buttons for 5, 10, 15 minutes
-2. **Usage Statistics**: Track how often eye drops are used
-3. **Custom Messages**: Allow users to customize reminder text
-4. **Sound Notifications**: Optional audio alert
-5. **History Log**: Keep track of when eye drops were used
-
-## License
-
-This project is open source and available for personal and commercial use.
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests!
+Messages and pull requests are welcome. This project is open for personal and commercial use to promote eye health.
 
-## Acknowledgments
+## License
 
-Built with ❤️ using Swift and SwiftUI for macOS.
+MIT License.
