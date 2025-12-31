@@ -19,6 +19,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false
     @AppStorage("isPaused") var isPaused: Bool = false
     
+    deinit {
+        // Remove observers when app terminates
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+    }
+
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Create menu bar item
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -37,6 +43,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             startBlinkTimer()
             startEyeDropTimer()
         }
+        
+        // Register for sleep/wake notifications
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(systemWillSleep),
+            name: NSWorkspace.willSleepNotification,
+            object: nil
+        )
+        
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(systemDidWake),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
     }
     
     private func updateMenu() {
@@ -115,6 +136,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @objc func quit() {
         NSApplication.shared.terminate(nil)
     }
+    
+    // MARK: - Sleep/Wake Handlers
+    
+    @objc private func systemWillSleep() {
+        // Invalidate timers when system sleeps to clean up resources
+        blinkTimer?.invalidate()
+        eyeDropTimer?.invalidate()
+    }
+    
+    @objc private func systemDidWake() {
+        // Restart timers when system wakes up, if not paused
+        if !isPaused {
+            startBlinkTimer()
+            startEyeDropTimer()
+        }
+    }
+
     
     private func startBlinkTimer() {
         guard !isPaused else { return }
