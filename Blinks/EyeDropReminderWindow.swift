@@ -44,7 +44,7 @@ class EyeDropReminderWindow {
         self.window = window
     }
     
-    private func close() {
+    func close() {
         window?.close()
         window = nil
     }

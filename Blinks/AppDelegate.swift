@@ -140,16 +140,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     // MARK: - Sleep/Wake Handlers
     
     @objc private func systemWillSleep() {
-        // Invalidate timers when system sleeps to clean up resources
+        // Invalidate timers and set to nil when system sleeps
         blinkTimer?.invalidate()
+        blinkTimer = nil
         eyeDropTimer?.invalidate()
+        eyeDropTimer = nil
+        
+        // Close any open eye drop reminder window to prevent stale UI
+        eyeDropReminderWindow?.close()
+        eyeDropReminderWindow = nil
     }
     
     @objc private func systemDidWake() {
-        // Restart timers when system wakes up, if not paused
-        if !isPaused {
-            startBlinkTimer()
-            startEyeDropTimer()
+        // Use DispatchQueue to ensure proper run loop scheduling after wake
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            // Restart timers when system wakes up, if not paused
+            if !self.isPaused {
+                self.startBlinkTimer()
+                self.startEyeDropTimer()
+            }
         }
     }
 
@@ -157,9 +167,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func startBlinkTimer() {
         guard !isPaused else { return }
         blinkTimer?.invalidate()
-        blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkInterval, repeats: true) { [weak self] _ in
+        blinkTimer = nil
+        let timer = Timer.scheduledTimer(withTimeInterval: blinkInterval, repeats: true) { [weak self] _ in
             self?.showBlinkAnimation()
         }
+        // Add tolerance to allow system to optimize power usage
+        timer.tolerance = blinkInterval * 0.1
+        blinkTimer = timer
     }
     
     func restartBlinkTimer() {
@@ -190,9 +204,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func startEyeDropTimer() {
         guard !isPaused && eyeDropEnabled else { return }
         eyeDropTimer?.invalidate()
-        eyeDropTimer = Timer.scheduledTimer(withTimeInterval: eyeDropInterval, repeats: true) { [weak self] _ in
+        eyeDropTimer = nil
+        let timer = Timer.scheduledTimer(withTimeInterval: eyeDropInterval, repeats: true) { [weak self] _ in
             self?.showEyeDropReminder()
         }
+        // Add tolerance to allow system to optimize power usage
+        timer.tolerance = min(eyeDropInterval * 0.1, 60.0) // Max 1 minute tolerance
+        eyeDropTimer = timer
     }
     
     func restartEyeDropTimer() {
@@ -218,8 +236,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     private func snoozeEyeDropReminder() {
         eyeDropTimer?.invalidate()
-        eyeDropTimer = Timer.scheduledTimer(withTimeInterval: eyeDropSnoozeDuration, repeats: false) { [weak self] _ in
+        eyeDropTimer = nil
+        let timer = Timer.scheduledTimer(withTimeInterval: eyeDropSnoozeDuration, repeats: false) { [weak self] _ in
             self?.showEyeDropReminder()
         }
+        timer.tolerance = min(eyeDropSnoozeDuration * 0.1, 30.0) // Max 30 seconds tolerance
+        eyeDropTimer = timer
     }
 }
