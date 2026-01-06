@@ -181,6 +181,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     private func showBlinkAnimation() {
+        // Skip animation if display is off/asleep
+        guard CGDisplayIsAsleep(CGMainDisplayID()) == 0 else { return }
+        
         let blinkWindow = BlinkWindow(opacity: blinkOpacity, duration: blinkDuration)
         blinkWindow.show()
     }
