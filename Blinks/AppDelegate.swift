@@ -143,12 +143,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         // Invalidate timers and set to nil when system sleeps
         blinkTimer?.invalidate()
         blinkTimer = nil
-        eyeDropTimer?.invalidate()
-        eyeDropTimer = nil
+        // eyeDropTimer?.invalidate()
+        // eyeDropTimer = nil
         
         // Close any open eye drop reminder window to prevent stale UI
-        eyeDropReminderWindow?.close()
-        eyeDropReminderWindow = nil
+        // eyeDropReminderWindow?.close()
+        // eyeDropReminderWindow = nil
     }
     
     @objc private func systemDidWake() {
@@ -158,7 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             // Restart timers when system wakes up, if not paused
             if !self.isPaused {
                 self.startBlinkTimer()
-                self.startEyeDropTimer()
+                // self.startEyeDropTimer()
             }
         }
     }
