@@ -19,6 +19,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = false
     @AppStorage("isPaused") var isPaused: Bool = false
     
+    private var nextEyeDropTime: Date?
+    
     deinit {
         // Remove observers when app terminates
         NSWorkspace.shared.notificationCenter.removeObserver(self)
@@ -62,6 +64,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     private func updateMenu() {
         let menu = NSMenu()
+        
+        // Show next eye drop reminder time
+        if eyeDropEnabled, let nextTime = nextEyeDropTime {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            let timeString = formatter.string(from: nextTime)
+            let eyeDropItem = NSMenuItem(title: "💧 Next eye drop: \(timeString)", action: nil, keyEquivalent: "")
+            eyeDropItem.isEnabled = false
+            menu.addItem(eyeDropItem)
+            menu.addItem(NSMenuItem.separator())
+        }
+        
         menu.addItem(NSMenuItem(title: "Settings", action: #selector(toggleSettings), keyEquivalent: "s"))
         menu.addItem(NSMenuItem.separator())
         
@@ -123,6 +137,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             blinkTimer = nil
             eyeDropTimer?.invalidate()
             eyeDropTimer = nil
+            nextEyeDropTime = nil
         } else {
             // Resume both timers
             startBlinkTimer()
@@ -208,6 +223,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         guard !isPaused && eyeDropEnabled else { return }
         eyeDropTimer?.invalidate()
         eyeDropTimer = nil
+        nextEyeDropTime = Date().addingTimeInterval(eyeDropInterval)
         let timer = Timer.scheduledTimer(withTimeInterval: eyeDropInterval, repeats: true) { [weak self] _ in
             self?.showEyeDropReminder()
         }
@@ -222,6 +238,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     private func showEyeDropReminder() {
         eyeDropTimer?.invalidate()
+        nextEyeDropTime = nil
         eyeDropReminderWindow = EyeDropReminderWindow(
             onDone: { [weak self] in
                 // User marked as done, just restart the normal timer
@@ -240,6 +257,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func snoozeEyeDropReminder() {
         eyeDropTimer?.invalidate()
         eyeDropTimer = nil
+        nextEyeDropTime = Date().addingTimeInterval(eyeDropSnoozeDuration)
         let timer = Timer.scheduledTimer(withTimeInterval: eyeDropSnoozeDuration, repeats: false) { [weak self] _ in
             self?.showEyeDropReminder()
         }
