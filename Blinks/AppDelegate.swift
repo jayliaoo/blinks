@@ -20,6 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDele
     @AppStorage("isPaused") var isPaused: Bool = false
     
     private var nextEyeDropTime: Date?
+    private var currentEyeDropInterval: Double? // Tracks adaptive interval
     
     deinit {
         // Remove observers when app terminates
@@ -157,6 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDele
             eyeDropTimer?.invalidate()
             eyeDropTimer = nil
             nextEyeDropTime = nil
+            currentEyeDropInterval = nil
         } else {
             // Resume both timers
             startBlinkTimer()
@@ -242,12 +244,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDele
         guard !isPaused && eyeDropEnabled else { return }
         eyeDropTimer?.invalidate()
         eyeDropTimer = nil
+        currentEyeDropInterval = nil
         nextEyeDropTime = Date().addingTimeInterval(eyeDropInterval)
         let timer = Timer.scheduledTimer(withTimeInterval: eyeDropInterval, repeats: true) { [weak self] _ in
             self?.showEyeDropReminder()
         }
         // Add tolerance to allow system to optimize power usage
         timer.tolerance = min(eyeDropInterval * 0.1, 60.0) // Max 1 minute tolerance
+        eyeDropTimer = timer
+    }
+
+    private func restartEyeDropTimerWithInterval(_ interval: Double) {
+        guard !isPaused && eyeDropEnabled else { return }
+        eyeDropTimer?.invalidate()
+        eyeDropTimer = nil
+        nextEyeDropTime = Date().addingTimeInterval(interval)
+        let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            self?.showEyeDropReminder()
+        }
+        timer.tolerance = min(interval * 0.1, 60.0)
         eyeDropTimer = timer
     }
     
@@ -260,7 +275,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDele
         nextEyeDropTime = nil
         eyeDropReminderWindow = EyeDropReminderWindow(
             onDone: { [weak self] in
-                // User marked as done, just restart the normal timer
+                // Deprecated: kept for API compatibility, no longer used
                 self?.eyeDropReminderWindow = nil
                 self?.restartEyeDropTimer()
             },
@@ -268,6 +283,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDele
                 // Snooze for configured duration
                 self?.eyeDropReminderWindow = nil
                 self?.snoozeEyeDropReminder()
+            },
+            onNotGood: { [weak self] in
+                // Halve next interval (one-time reduction)
+                self?.eyeDropReminderWindow = nil
+                let base = self?.currentEyeDropInterval ?? self?.eyeDropInterval ?? 1800.0
+                let halved = base / 2
+                let minInterval: Double = 60.0 // Minimum 1 minute
+                self?.currentEyeDropInterval = max(halved, minInterval)
+                self?.restartEyeDropTimerWithInterval(self?.currentEyeDropInterval ?? 1800.0)
+            },
+            onGood: { [weak self] in
+                // Restore to user-configured interval
+                self?.eyeDropReminderWindow = nil
+                self?.currentEyeDropInterval = nil
+                self?.restartEyeDropTimer()
             }
         )
         eyeDropReminderWindow?.show()

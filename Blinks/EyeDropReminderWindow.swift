@@ -5,17 +5,25 @@ class EyeDropReminderWindow {
     private var window: NSWindow?
     private var onDone: (() -> Void)?
     private var onSnooze: (() -> Void)?
-    
-    init(onDone: @escaping () -> Void, onSnooze: @escaping () -> Void) {
+    private var onNotGood: (() -> Void)?
+    private var onGood: (() -> Void)?
+
+    init(onDone: @escaping () -> Void, onSnooze: @escaping () -> Void, onNotGood: @escaping () -> Void, onGood: @escaping () -> Void) {
         self.onDone = onDone
         self.onSnooze = onSnooze
+        self.onNotGood = onNotGood
+        self.onGood = onGood
     }
     
     func show() {
         let reminderView = EyeDropReminderView(
-            onDone: { [weak self] in
+            onNotGood: { [weak self] in
                 self?.close()
-                self?.onDone?()
+                self?.onNotGood?()
+            },
+            onGood: { [weak self] in
+                self?.close()
+                self?.onGood?()
             },
             onSnooze: { [weak self] in
                 self?.close()
@@ -51,9 +59,10 @@ class EyeDropReminderWindow {
 }
 
 struct EyeDropReminderView: View {
-    let onDone: () -> Void
+    let onNotGood: () -> Void
+    let onGood: () -> Void
     let onSnooze: () -> Void
-    
+
     var body: some View {
         ZStack {
             // Background gradient
@@ -66,27 +75,27 @@ struct EyeDropReminderView: View {
                 endPoint: .bottomTrailing
             )
             .edgesIgnoringSafeArea(.all)
-            
-            VStack(spacing: 30) {
+
+            VStack(spacing: 24) {
                 // Icon
                 ZStack {
                     Circle()
                         .fill(Color.white.opacity(0.2))
-                        .frame(width: 100, height: 100)
-                    
+                        .frame(width: 80, height: 80)
+
                     Image(systemName: "drop.fill")
-                        .font(.system(size: 50))
+                        .font(.system(size: 40))
                         .foregroundColor(.white)
                 }
-                .padding(.top, 30)
-                
+                .padding(.top, 24)
+
                 // Title
                 Text("Time for Eye Drops!")
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
-                
+
                 // Message
                 Text("Don't forget to use your eye drops to keep your eyes healthy and comfortable.")
                     .font(.system(size: 14))
@@ -95,62 +104,89 @@ struct EyeDropReminderView: View {
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 40)
-                
-                // Buttons
-                HStack(spacing: 20) {
-                    // Snooze button
-                    Button(action: onSnooze) {
+
+                // Feeling buttons row
+                HStack(spacing: 16) {
+                    Button(action: onNotGood) {
                         HStack {
-                            Image(systemName: "clock.arrow.circlepath")
-                                .font(.system(size: 16))
-                            Text("Snooze")
+                            Image(systemName: "face.dashed")
+                                .font(.system(size: 14))
+                            Text("Not Feeling Good")
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
-                        .frame(width: 150, height: 44)
-                        .background(Color.white.opacity(0.2))
-                        .cornerRadius(12)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                        .background(Color.red.opacity(0.7))
+                        .cornerRadius(10)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
                     .onHover { hovering in
-                        NSCursor.pointingHand.set()
+                        if hovering { NSCursor.pointingHand.set() }
                     }
-                    
-                    // Done button
-                    Button(action: onDone) {
+
+                    Button(action: onGood) {
                         HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 16))
-                            Text("Done")
+                            Image(systemName: "face.smiling")
+                                .font(.system(size: 14))
+                            Text("Feeling Good")
                                 .fontWeight(.semibold)
                         }
-                        .foregroundColor(Color(red: 0.1, green: 0.2, blue: 0.5))
-                        .frame(width: 150, height: 44)
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                        .background(Color.green.opacity(0.7))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                        )
                     }
                     .buttonStyle(PlainButtonStyle())
                     .onHover { hovering in
-                        NSCursor.pointingHand.set()
+                        if hovering { NSCursor.pointingHand.set() }
                     }
                 }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 30)
+
+                // Snooze button
+                Button(action: onSnooze) {
+                    HStack {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.system(size: 14))
+                        Text("Snooze")
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.white.opacity(0.8))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 36)
+                    .background(Color.white.opacity(0.15))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                .onHover { hovering in
+                    if hovering { NSCursor.pointingHand.set() }
+                }
+                .padding(.horizontal, 20)
             }
             .padding(.vertical, 10)
         }
-        .frame(width: 450, height: 340)
+        .frame(width: 450, height: 320)
     }
 }
 
 #Preview {
     EyeDropReminderView(
-        onDone: { print("Done") },
+        onNotGood: { print("Not Feeling Good") },
+        onGood: { print("Feeling Good") },
         onSnooze: { print("Snooze") }
     )
 }
