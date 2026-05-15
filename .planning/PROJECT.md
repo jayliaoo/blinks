@@ -14,23 +14,20 @@ Keep users' eyes healthy by delivering reliable, timely reminders for blinking a
 
 - ✓ Menu bar app with eye icon and status menu — existing
 - ✓ Full-screen blink animation reminder — existing
-- ✓ Eye drop reminder with snooze and done buttons — existing
 - ✓ Blink interval/duration/opacity settings — existing
 - ✓ Eye drop interval configuration — existing
 - ✓ Launch at login support — existing
 - ✓ Pause/resume functionality — existing
 - ✓ Sleep/wake handling — existing
+- ✓ Adaptive eye drop reminder with feeling buttons — Phase 1
 
 ### Active
 
-- [ ] EYE-01: Replace Done/Snooze buttons with "Not Good" / "Good" feeling buttons in eye drop reminder
-- [ ] EYE-02: "Not Good" halves next reminder interval (one-time reduction)
-- [ ] EYE-03: "Good" restores next reminder interval to user-configured value
+(None — all active requirements delivered)
 
 ### Out of Scope
 
 - Mobile app — macOS only, menu bar focused
-- Continuous interval halving — user confirmed one-time reduction only
 
 ## Context
 
@@ -46,9 +43,9 @@ Brownfield Swift/SwiftUI macOS app. Central logic lives in `AppDelegate.swift`, 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Replace Done/Snooze with Good/Not Good feeling buttons | User wants adaptive interval based on eye comfort feedback | — Pending |
-| "Not Good" halves interval once (not continuously) | Prevents runaway rapid reminders | — Pending |
-| "Good" resets to user-configured interval | Respects user's preference when they feel fine | — Pending |
+| Three buttons: Snooze + Not Feeling Good + Feeling Good | Replace only Done button, keep Snooze, add two feeling-based options | ✓ Good |
+| "Not Feeling Good" halves interval once | Prevents runaway rapid reminders | ✓ Good |
+| "Feeling Good" resets to user-configured interval | Respects user's preference when they feel fine | ✓ Good |
 
 ## Evolution
 

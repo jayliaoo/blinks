@@ -7,24 +7,23 @@
 
 ### Adaptive Eye Drop Reminder
 
-- [ ] **EYE-01**: Eye drop reminder window shows "Not Good" and "Good" feeling buttons instead of Done/Snooze
-- [ ] **EYE-02**: Tapping "Not Good" halves the next reminder interval (one-time reduction only)
-- [ ] **EYE-03**: Tapping "Good" restores next reminder interval to user-configured value
+- [ ] **EYE-01**: Eye drop reminder window shows three buttons: Snooze (unchanged), Not Feeling Good, Feeling Good
+- [ ] **EYE-02**: Tapping "Not Feeling Good" halves the next reminder interval (one-time reduction only)
+- [ ] **EYE-03**: Tapping "Feeling Good" restores next reminder interval to user-configured value
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Continuous halving on repeated "Not Good" | User confirmed one-time reduction only |
-| Changing reminder window title/copy | User wants to keep current文案 |
+| Continuous halving on repeated "Not Feeling Good" | User confirmed one-time reduction only |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| EYE-01 | Phase 1 | Pending |
-| EYE-02 | Phase 1 | Pending |
-| EYE-03 | Phase 1 | Pending |
+| EYE-01 | Phase 1 | Complete |
+| EYE-02 | Phase 1 | Complete |
+| EYE-03 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 3 total
