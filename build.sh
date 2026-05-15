@@ -1,23 +1,74 @@
 #!/bin/bash
 
 # Build script for Blinks macOS app
-# This script will open the project in Xcode
+# Usage:
+#   ./build.sh          - Build the .app bundle (Release)
+#   ./build.sh dmg      - Build and package into a .dmg
 
-echo "🚀 Opening Blinks project in Xcode..."
-echo ""
-echo "📋 Build Instructions:"
-echo "1. Xcode will open the project"
-echo "2. Select 'Blinks' scheme at the top"
-echo "3. Press Cmd+R to build and run"
-echo "4. The app will appear in your menu bar (look for the eye icon 👁️)"
-echo ""
-echo "⚙️  To create a distributable app:"
-echo "1. In Xcode, select Product > Archive"
-echo "2. Click 'Distribute App'"
-echo "3. Choose 'Copy App' to save the .app bundle"
-echo ""
+set -e
 
-# Open the project in Xcode
-open Blinks.xcodeproj
+APP_NAME="Blinks"
+SCHEME="Blinks"
+PROJECT="Blinks.xcodeproj"
+BUILD_DIR="build"
+APP_PATH="$BUILD_DIR/$APP_NAME.app"
+DMG_PATH="$BUILD_DIR/$APP_NAME.dmg"
+DMG_TEMP="$BUILD_DIR/dmg_temp"
 
-echo "✅ Project opened in Xcode!"
+# Clean previous build
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+
+echo "🔨 Building $APP_NAME (Release)..."
+
+# Build the app with xcodebuild
+xcodebuild -project "$PROJECT" \
+    -scheme "$SCHEME" \
+    -configuration Release \
+    -derivedDataPath "$BUILD_DIR/DerivedData" \
+    -archivePath "$BUILD_DIR/$APP_NAME.xcarchive" \
+    archive \
+    CODE_SIGN_IDENTITY="-" \
+    CODE_SIGNING_ALLOWED=YES \
+    2>&1 | tail -5
+
+# Export the archive to .app
+xcodebuild -exportArchive \
+    -archivePath "$BUILD_DIR/$APP_NAME.xcarchive" \
+    -exportOptionsPlist exportOptions.plist \
+    -exportPath "$BUILD_DIR/export" \
+    2>&1 | tail -5
+
+# Move .app to build root
+mv "$BUILD_DIR/export/$APP_NAME.app" "$APP_PATH"
+
+echo "✅ Built: $APP_PATH"
+
+# If "dmg" argument passed, create DMG
+if [ "$1" = "dmg" ]; then
+    echo ""
+    echo "📦 Creating DMG..."
+
+    # Prepare DMG staging folder
+    rm -rf "$DMG_TEMP"
+    mkdir -p "$DMG_TEMP"
+    cp -R "$APP_PATH" "$DMG_TEMP/"
+    ln -s /Applications "$DMG_TEMP/Applications"
+
+    # Create DMG
+    rm -f "$DMG_PATH"
+    hdiutil create -volname "$APP_NAME" \
+        -srcfolder "$DMG_TEMP" \
+        -ov -format UDZO \
+        "$DMG_PATH"
+
+    # Cleanup
+    rm -rf "$DMG_TEMP"
+
+    echo "✅ DMG created: $DMG_PATH"
+    echo ""
+    echo "📏 Size: $(du -h "$DMG_PATH" | cut -f1)"
+fi
+
+echo ""
+echo "Done!"

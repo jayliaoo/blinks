@@ -1,7 +1,7 @@
 import SwiftUI
 import ServiceManagement
 
-class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDelegate {
     private var statusItem: NSStatusItem!
     private var settingsWindow: NSWindow?
     private var blinkTimer: Timer?
@@ -62,19 +62,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         )
     }
     
+    private var eyeDropMenuItem: NSMenuItem?
+    
     private func updateMenu() {
         let menu = NSMenu()
+        menu.delegate = self
         
-        // Show next eye drop reminder time
-        if eyeDropEnabled, let nextTime = nextEyeDropTime {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            let timeString = formatter.string(from: nextTime)
-            let eyeDropItem = NSMenuItem(title: "💧 Next eye drop: \(timeString)", action: nil, keyEquivalent: "")
-            eyeDropItem.isEnabled = false
-            menu.addItem(eyeDropItem)
-            menu.addItem(NSMenuItem.separator())
-        }
+        // Eye drop time item (always present, hidden when not applicable)
+        let eyeDropItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+        eyeDropItem.isEnabled = false
+        eyeDropItem.isHidden = true
+        eyeDropMenuItem = eyeDropItem
+        menu.addItem(eyeDropItem)
+        
+        let eyeDropSeparator = NSMenuItem.separator()
+        menu.addItem(eyeDropSeparator)
         
         menu.addItem(NSMenuItem(title: "Settings", action: #selector(toggleSettings), keyEquivalent: "s"))
         menu.addItem(NSMenuItem.separator())
@@ -87,6 +89,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q"))
         statusItem.menu = menu
+    }
+    
+    // NSMenuDelegate - update dynamic items each time menu opens
+    func menuWillOpen(_ menu: NSMenu) {
+        // Update eye drop time display
+        if eyeDropEnabled, let nextTime = nextEyeDropTime {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            let timeString = formatter.string(from: nextTime)
+            eyeDropMenuItem?.title = "💧 Next eye drop: \(timeString)"
+            eyeDropMenuItem?.isHidden = false
+        } else {
+            eyeDropMenuItem?.isHidden = true
+        }
+        
+        // Update pause/resume title
+        pauseMenuItem?.title = isPaused ? "Resume" : "Pause"
     }
     
     @objc func showMenu() {
