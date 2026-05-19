@@ -105,13 +105,13 @@ struct EyeDropReminderView: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 40)
 
-                // Feeling buttons row
-                HStack(spacing: 16) {
+                // Buttons row - all 3 buttons in one row
+                HStack(spacing: 12) {
                     Button(action: onNotGood) {
                         HStack {
                             Image(systemName: "face.dashed")
                                 .font(.system(size: 14))
-                            Text("Not Feeling Good")
+                            Text("Not Good")
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
@@ -133,7 +133,7 @@ struct EyeDropReminderView: View {
                         HStack {
                             Image(systemName: "face.smiling")
                                 .font(.system(size: 14))
-                            Text("Feeling Good")
+                            Text("Good")
                                 .fontWeight(.semibold)
                         }
                         .foregroundColor(.white)
@@ -150,30 +150,28 @@ struct EyeDropReminderView: View {
                     .onHover { hovering in
                         if hovering { NSCursor.pointingHand.set() }
                     }
-                }
-                .padding(.horizontal, 20)
 
-                // Snooze button
-                Button(action: onSnooze) {
-                    HStack {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .font(.system(size: 14))
-                        Text("Snooze")
-                            .fontWeight(.semibold)
+                    Button(action: onSnooze) {
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .font(.system(size: 14))
+                            Text("Snooze")
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.white.opacity(0.8))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                        .background(Color.white.opacity(0.15))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                        )
                     }
-                    .foregroundColor(.white.opacity(0.8))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
-                    .background(Color.white.opacity(0.15))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-                .onHover { hovering in
-                    if hovering { NSCursor.pointingHand.set() }
+                    .buttonStyle(PlainButtonStyle())
+                    .onHover { hovering in
+                        if hovering { NSCursor.pointingHand.set() }
+                    }
                 }
                 .padding(.horizontal, 20)
             }
