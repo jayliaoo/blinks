@@ -285,12 +285,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSMenuDele
                 self?.snoozeEyeDropReminder()
             },
             onNotGood: { [weak self] in
-                // Halve next interval (one-time reduction)
+                // Halve next interval (one-time reduction only)
                 self?.eyeDropReminderWindow = nil
-                let base = self?.currentEyeDropInterval ?? self?.eyeDropInterval ?? 1800.0
-                let halved = base / 2
-                let minInterval: Double = 60.0 // Minimum 1 minute
-                self?.currentEyeDropInterval = max(halved, minInterval)
+                if self?.currentEyeDropInterval == nil {
+                    let base = self?.eyeDropInterval ?? 1800.0
+                    let minInterval: Double = 60.0
+                    self?.currentEyeDropInterval = max(base / 2, minInterval)
+                }
                 self?.restartEyeDropTimerWithInterval(self?.currentEyeDropInterval ?? 1800.0)
             },
             onGood: { [weak self] in
